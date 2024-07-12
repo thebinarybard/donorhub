@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+
+{% block title %} Settings {% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+    
+       
+
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="card border-primary mt-4 ml-auto mx-auto bg-card rounded card-txt1 "  style="min-height:300px;">
+                    <div class="card-body bg-card rounded ">
+                        <div class="card-header">
+                        <h2>Profile Settings</h2>
+                      
+                        </div>
+                        <form method="post" action="{{ url_for('settings') }}">
+                            <div class="form-group">
+                                <label for="username">Username</label>
+                                <input type="text" class="form-control " id="username" name="username"
+                                    value="{{ user.username }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="text" class="form-control" id="email" name="email"
+                                    value="{{ user.email }}">
+                            </div>
+                            <div class="form-group password-container">
+                                <label for="old_password">Old Password</label>
+                                <input type="password" class="form-control " id="old_password" name="old_password"
+                                placeholder="Enter Old Password">
+                                <i class="far fa-eye toggle-password" id="togglePassword3"></i>
+                            </div>
+                            <div class="form-group password-container">
+                                <label for="new_password">New Password</label>
+                                <input type="password" class="form-control" id="new_password" name="new_password"
+                                placeholder="Enter New Password">
+                                <i class="far fa-eye toggle-password" id="togglePassword2"></i>
+                            </div>
+                            <div class="form-group password-container">
+                                <label for="confirm_password">Confirm New Password</label>
+                                <input type="password" class="form-control" id="confirm_password" name="confirm_password" 
+                                placeholder="Enter New Password (Again)">
+                                <i class="far fa-eye toggle-password" id="togglePassword2"></i>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class=" mt-4">
+    <div class="d-flex justify-content-center align-items-center mb-4">
+        <h2 class="ml-3" style="font-weight: 600;"><u><strong>Post History</strong></u></h2>
+
+    </div>
+    <div class="row justify-content-center">    
+        <div class="col-md-8">
+            {% for post in posts %}
+            <div class="card mb-3 card-txt1 w-50 ml-auto mr-auto" style="min-height: 200px;">
+                <div class="card-body bg-card rounded">
+                    <h3 class="card-title"><strong>{{ post.header }}</strong></h3>
+                    <p class="card-text"><b class="mr-3">Requirements:</b>{{ post.content }}</p>
+                    <small class="text-muted">Posted by <a href="/profile/{{ post.username }}"  class="card-txt1 bold ml-2 fs-4 card-link">{{ post.name }}</a></small>
+                    <div class="row"></div>
+                    <small class="mb-2">{{ post.location }}</small>
+
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+</div>
+{% endblock %}

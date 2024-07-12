@@ -1,0 +1,173 @@
+{% extends "layout.html" %}
+
+{% block title %}Requests{% endblock %}
+
+{% block content %}
+<div>
+    <!---------------------------------------------------------------- Search Bar and Filters -------------------------------------------------------------------->
+    <div class="row mb-4 mt-4">
+        <div class="col-md-8 offset-md-2 bg-card-2 p-3 w-50 card">
+            <input type="text" id="search-bar" class="form-control" placeholder="Search by donor or recipient">
+            <select id="status-filter" class="form-control mt-2">
+                <option value="">All</option>
+                <option value="pending">Pending</option>
+                <option value="accepted">Accepted</option>
+            </select>
+        </div>
+    </div>
+
+    <!--------------------------------------------------------==--------- Requests Container ---------------------------------------------------------------------->
+    <div id="requests-container" class="row ml-4 mr-4">
+        {% if not grouped_requests %}
+        <div class="col-12">
+            <div class="card border-primary mt-4" style="min-height:300px;">
+                <div class="card-body bg-card rounded">
+                    <h2 class="card-header mb-2">No Pending Requests</h2>
+                </div>
+            </div>
+        </div>
+        {% else %}
+            {% for post_id, post_data in grouped_requests.items() %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card mt-4 card-txt1">
+                    <div class="card-header cursor-pointer bg-card" data-toggle="collapse" data-target="#collapse{{ post_id }}" aria-expanded="false" aria-controls="collapse{{ post_id }}">
+                        <h5 class="mb-0">{{ post_data.post_header }}
+                            <i class="fas fa-chevron-down float-right"></i>
+                        </h5>
+                    </div>
+                    <div id="collapse{{ post_id }}" class="collapse card-body bg-card-2 rounded">
+                        <p class="card-text">Post Content: {{ post_data.post_content }}</p>
+
+                        {% for request in post_data.requests %}
+                        <div class="card mt-2">
+                            <div class="card-body bg-card card-text">
+                                <p class="card-text">Donor: <a href="/profile/{{ request.d_uname }}" class="ml-3 card-link">{{ request.donor_name }}</a></p>
+                                <p class="card-text">Recipient: <a href="/profile/{{ request.r_uname }}" class="ml-1 card-link">{{ request.recipient_name }}</a></p>
+                                <p class="card-subtitle">Request Date: {{ request.request_date }}</p>
+                                {% if request.accepted %}
+                                <p class="text-success"><strong>Accepted</strong></p>
+                                {% else %}
+                                <p class="text-warning"><strong>Pending</strong></p>
+                                {% endif %}
+                                <div class="row">
+                                {% if not request.accepted and user_type in ['recipient', 'admin'] %}
+                                <form action="{{ url_for('accept_request', request_id=request.id) }}" method="post">
+                                    <button type="submit" class="btn btn-success ml-2">Accept Request</button>
+                                </form>
+                                {% endif %}
+
+                                <form action="{{ url_for('remove_request', request_id=request.id) }}" method="post">
+                                    <button type="submit" class="btn btn-danger ml-2">Remove Request</button>
+                                </form>
+                            </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchBar = document.getElementById('search-bar');
+        const statusFilter = document.getElementById('status-filter');
+        const requestsContainer = document.getElementById('requests-container');
+
+        function attachCardHeaderListeners(container) {
+            container.querySelectorAll('.card-header').forEach(header => {
+                header.addEventListener('click', function () {
+                    console.log('Toggling collapse for card header:', this.textContent);
+                    const icon = this.querySelector('i');
+                    if (this.nextElementSibling.classList.contains('collapse')) {
+                        icon.classList.remove('fa-chevron-down');
+                        icon.classList.add('fa-chevron-up');
+                    } else {
+                        icon.classList.remove('fa-chevron-up');
+                        icon.classList.add('fa-chevron-down');
+                    }
+                    this.nextElementSibling.classList.toggle('collapse');
+                });
+            });
+        }
+
+        function fetchFilteredRequests() {
+            const query = searchBar.value;
+            const status = statusFilter.value;
+
+            console.log('Fetching requests with query:', query, 'and status:', status);
+
+            fetch(`/filter_requests?query=${query}&status=${status}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Received data:', data);
+
+                    requestsContainer.innerHTML = '';
+
+                    if (data.requests.length === 0) {
+                        console.log('No requests found, displaying "No Pending Requests" message');
+                        requestsContainer.innerHTML = `
+                        <div class="col-12">
+                            <div class="card border-primary mt-4" style="min-height:300px;">
+                                <div class="card-body bg-card rounded">
+                                    <h2 class="card-header mb-2">No Pending Requests</h2>
+                                </div>
+                            </div>
+                        </div>
+                        `;
+                    } else {
+                        console.log('Updating requests container with', data.requests.length, 'requests');
+                        data.requests.forEach(post => {
+                            let postHtml = `
+                            <div class="col-md-6 col-lg-4">
+                                <div class="card mt-4 card-txt1">
+                                    <div class="card-header cursor-pointer bg-card" data-toggle="collapse" data-target="#collapse${post.post_id}" aria-expanded="false" aria-controls="collapse${post.post_id}">
+                                        <h5 class="mb-0">${post.post_header}
+                                            <i class="fas fa-chevron-down float-right"></i>
+                                        </h5>
+                                    </div>
+                                    <div id="collapse${post.post_id}" class="collapse card-body bg-card-2 rounded">
+                                        <p class="card-text card-txt-2">Post Content: ${post.post_content}</p>
+                            `;
+
+                            post.requests.forEach(request => {
+                                postHtml += `
+                                <div class="card mt-2">
+                                    <div class="card-body bg-card">
+                                        <p class="card-text">Donor: <a href="/profile/${request.d_uname}" class="ml-3 card-link">${request.donor_name}</a></p>
+                                        <p class="card-text">Recipient: <a href="/profile/${request.r_uname}" class="ml-1 card-link">${request.recipient_name}</a></p>
+                                        <p class="card-subtitle">Request Date: ${request.request_date}</p>
+                                        ${request.accepted ? '<p class="text-success"><strong>Accepted</strong></p>' : '<p class="text-warning"><strong>Pending</strong></p>'}
+                                        ${!request.accepted && data.user_type.includes('recipient', 'admin') ? `<form action="/accept_request/${request.id}" method="post"><button type="submit" class="btn btn-success">Accept Request</button></form>` : ''}
+                                        <form action="/remove_request/${request.id}" method="post">
+                                            <button type="submit" class="btn btn-danger">Remove Request</button>
+                                        </form>
+                                    </div>
+                                </div>
+                                `;
+                            });
+
+                            postHtml += `</div></div></div>`;
+                            requestsContainer.insertAdjacentHTML('beforeend', postHtml);
+                        });
+
+                        // Reattach event listeners to new card headers
+                        attachCardHeaderListeners(requestsContainer);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching requests:', error);
+                });
+        }
+
+        searchBar.addEventListener('input', fetchFilteredRequests);
+        statusFilter.addEventListener('change', fetchFilteredRequests);
+
+        // Initial attachment of event listeners to card headers
+        attachCardHeaderListeners(requestsContainer);
+    });
+</script>
+{% endblock %}

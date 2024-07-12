@@ -1,0 +1,75 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Register
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card mt-4 shadow-lg">
+            <div class="card-body bg-card rounded">
+                <h2 class="card-title text-center">Register</h2>
+                <form action="/register" method="post">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control" id="name" name="name" required placeholder="Name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" required placeholder="Email">
+                    </div>
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" required
+                            placeholder="Username">
+                    </div>
+
+
+                    <div class="form-group password-container">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" id="password" name="password"  placeholder="Password" required>
+                        <i class="far fa-eye toggle-password" id="togglePassword2"></i>
+                    </div>
+                    <div class="form-group password-container">
+                        <label for="password">Confirm Password</label>
+                        <input type="password" class="form-control" id="comfirmation" name="confirmation" placeholder="Confirm Password" required>
+                        <i class="far fa-eye toggle-password" id="togglePassword3"></i>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="location">City/Location</label>
+                        <input type="text" class="form-control" id="location" name="location" required
+                            placeholder="City/Location">
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control" id="user_type" name="user_type" required hidden>
+                            <option selected value="{{ u }}">User Type</option>
+
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Register</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('togglePassword2').addEventListener('click', function() {
+        const passwordField = document.getElementById('password');
+        const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordField.setAttribute('type', type);
+        this.classList.toggle('fa-eye');
+        this.classList.toggle('fa-eye-slash');
+    });
+    document.getElementById('togglePassword3').addEventListener('click', function() {
+        const passwordField = document.getElementById('confirmation');
+        const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordField.setAttribute('type', type);
+        this.classList.toggle('fa-eye');
+        this.classList.toggle('fa-eye-slash');
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card mt-5 shadow-lg bg-card rounded">
+                <div class="card-header text-center">
+                    <h3>Login</h3>
+                </div>
+                <div class="card-body ">
+                    <form method="POST" action="/login">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" class="form-control" id="username" name="username" required>
+                        </div>
+                        <div class="form-group password-container">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control " name="password" required>
+                            <i class="far fa-eye toggle-password" id="togglePassword"></i>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Login</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Include jQuery -->
+ 
+
+
+{% endblock %}

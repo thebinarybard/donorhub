@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>DonorHub: {% block title %}{% endblock %}</title>
+
+    <!--bootstrap-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <!--Styles.css-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+    <!--Font Awesome icons-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<body class="bg-body no-transition" onload="setDarkModeFromStorage()">
+
+    <!---------------------------------- NAVBAR -------------------------------------------->
+
+    <nav class="navbar navbar-expand-sm navbar-white bg-nvbr" style="height: 80px;">
+
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"><i class="fas fa-bars"></i></span>
+            </button>
+            <div class="collapse navbar-collapse bg-nvbr w-auto " id="navbarNav">
+                <ul class="navbar-nav mr-auto">
+                    {% if session.user_id %}
+                    <li class="nav-item ml-1"><a class="nav-link" href="/">
+                            <i class="fas fa-home mr-2"></i> Home
+                        </a></li>
+                    {% endif %}
+                </ul>
+                <hr class="border-white">
+                <ul class="navbar-nav ml-auto">
+                    {% if session.type == 'admin' %}
+                    <li class="nav-item ml-1"><a class="nav-link" href="/admin">
+                            <i class="fas fa-tachometer-alt mr-2"></i> Dashboard
+                        </a></li>
+                    {% endif %}
+                    {% if session.user_id %}
+                    <li class="nav-item ml-1"><a class="nav-link" href="/requests">
+                            <i class="fas fa-clipboard-list mr-2"></i> Requests
+                        </a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-user-circle user-prof"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right bg-nvbr border border-3 border-white"
+                            aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="/profile">
+                                <i class="fa fa-user mr-2" aria-hidden="true"></i> Profile
+                            </a>
+                            <a class="dropdown-item" href="/post-history">
+                                <i class="fa fa-history mr-2"></i> History
+                            </a>
+                            <a class="dropdown-item" href="/settings">
+                                <i class="fa fa-cog mr-2" aria-hidden="true"></i> Settings
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <section id="theme">
+                                <button class="dropdown-item" id="theme-btn">
+                                    <i class="fa-sharp fas fa-sun"></i>
+                                    <i class="fas fa-moon"></i>
+                                </button>
+                            </section>
+
+
+                            {% if session.type == 'admin' %}
+
+
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/users">
+                                <i class="fa fa-users mr-2"></i> User List
+                            </a>
+                            {% endif %}
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/logout">
+                                <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                            </a>
+                        </div>
+                    </li>
+
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">
+                            <i class="fas fa-sign-in-alt mr-2"></i> Login
+                        </a>
+                    </li>
+
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-user-plus mr-2"></i> Register
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right bg-nvbr border border-3 border-white"
+                            aria-labelledby="navbarDropdown">
+
+                            <form method="get" action="/register">
+                                <button class="dropdown-item text-white" name="recipient"><i class="fa fa-user mr-2"
+                                        aria-hidden="true"></i> Recipient</button>
+                                <button class="dropdown-item text-white" name="donor"><i class="fa fa-user mr-2"
+                                        aria-hidden="true"></i> Donor</button>
+                                <button class="dropdown-item text-white" name="donor_org"><i class="fa fa-users mr-2"
+                                        aria-hidden="true"></i> Donor Organisation</button>
+                            </form>
+                        </div>
+                    </li>
+
+
+                    {% endif %}
+                </ul>
+            </div>
+
+        </div>
+    </nav>
+
+
+    <!---------------------------------- Flash Alert -------------------------------------->
+
+    {% with messages = get_flashed_messages(with_categories=True) %}
+    {% if messages %}
+    <div class="mt-4">
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show ml-3 mr-3" role="alert" id="alert">
+            {% if category == 'success' %}
+            <i class="fa fa-check-circle mr-2"></i>
+            {% elif category == 'warning' %}
+            <i class="fa fa-exclamation-triangle mr-2"></i>
+            {% elif category == 'danger'%}
+            <i class="fa fa-times-cicle mr-2"></i>
+            {% endif %}
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" id="alert-btn">
+                <span>&times;</span>
+            </button>
+        </div>
+
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+
+    <div class="">
+        {% block content %}
+
+        {% endblock %}
+    </div>
+
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.2/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+
+    <script src="../static/script.js">
+
+    </script>
+
+
+
+
+</body>
+
+</html>

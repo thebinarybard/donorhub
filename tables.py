@@ -1,6 +1,11 @@
 import sqlite3
 
+from app import get_db, close_db
+
+        
 def create():
+    db = get_db()
+    db = db.cursor()
     # Connect to SQLite database (creates it if it doesn't exist)
     conn = sqlite3.connect('donations.db')
     cursor = conn.cursor()
@@ -63,6 +68,12 @@ def create():
     cursor.execute(insert_admin_user)
     cursor.execute(create_trigger_set_timestamp)
     cursor.execute(create_donation_requests_table)
+    
+    db.execute(create_users_table)
+    db.execute(create_posts_table)
+    db.execute(insert_admin_user)
+    db.execute(create_trigger_set_timestamp)
+    db.execute(create_donation_requests_table)
 
     # Commit changes and close connection
     conn.commit()

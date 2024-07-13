@@ -1,4 +1,4 @@
-//set dark mode 123
+//set dark mode
 
 function SetDarkmode() {
 

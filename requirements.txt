@@ -1,8 +1,0 @@
-Flask==2.0.2
-Flask-Session==0.4.0
-Flask-Login==0.6.3
-
-Werkzeug==2.0.2
-cs50==9.3.0
-pytz==2023.4
-requests==2.26.0

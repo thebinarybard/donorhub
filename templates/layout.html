@@ -14,6 +14,11 @@
 
     <!--Font Awesome icons-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!--Google Fonts-->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Rock+Salt&display=swap');
+    </style>
 </head>
 
 <body class="bg-body no-transition" onload="setDarkModeFromStorage()">
@@ -30,22 +35,32 @@
             <div class="collapse navbar-collapse bg-nvbr w-auto " id="navbarNav">
                 <ul class="navbar-nav mr-auto">
                     {% if session.user_id %}
-                    <li class="nav-item ml-1"><a class="nav-link" href="/">
-                            <i class="fas fa-home mr-2"></i> Home
-                        </a></li>
+                    <li class="nav-item ml-1">
+                        <a class="nav-brand" href="/">
+                            <div class="row">
+                                <img class="logo" src="../static/logo-1.png">
+                                <h3 class="rock-salt-regular mt-auto mb-auto">DonorHub</h3>
+                                <!--< i class="fas fa-home mr-2"></i> Home -->
+                            </div>
+                        </a>
+                    </li>
                     {% endif %}
                 </ul>
                 <hr class="border-white">
                 <ul class="navbar-nav ml-auto">
                     {% if session.type == 'admin' %}
-                    <li class="nav-item ml-1"><a class="nav-link" href="/admin">
+                    <li class="nav-item ml-1">
+                        <a class="nav-link" href="/admin">
                             <i class="fas fa-tachometer-alt mr-2"></i> Dashboard
-                        </a></li>
+                        </a>
+                    </li>
                     {% endif %}
                     {% if session.user_id %}
-                    <li class="nav-item ml-1"><a class="nav-link" href="/requests">
+                    <li class="nav-item ml-1">
+                        <a class="nav-link" href="/requests">
                             <i class="fas fa-clipboard-list mr-2"></i> Requests
-                        </a></li>
+                        </a>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

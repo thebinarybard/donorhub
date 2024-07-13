@@ -1,11 +1,11 @@
 /*--------------------------------------- Custom Colors -----------------------------------------------*/
 
 :root {
-    --navbar: #ff8b38;
-    --body: #dededed3;
+    --navbar: #e07428;
+    --body: #f5d497e4;
 
     --drdwn: black;
-    --drdwn-hvr-bg: #fb7413;
+    --drdwn-hvr-bg: #bd5307;
 
     --text: black;
     --text-hvr: white;
@@ -241,7 +241,14 @@
     transition: none !important;
 }
 
-
+/*---------------------------------------------Fonts---------------------------------------------*/
+.rock-salt-regular {
+    font-family: "Rock Salt", cursive;
+    font-weight: 400;
+    font-style: normal;
+    font-size:120%;
+  }
+  
 /*-------------------------------------------- Table ------------------------------------------- */
 
 .table {
@@ -295,11 +302,16 @@
 
 /*------------------------------------- Navbar and Dropdown --------------------------------------*/
 
-.nav-item a {
+.nav-item a,
+.nav-item .nav-brand {
     color: var(--nav-item);
+    margin-top: auto;
+    margin-bottom: auto;
 }
 
-.nav-item a:hover {
+.nav-item a:hover ,
+.nav-item .nav-brand:hover
+{
     background-color: var(--drdwn-hvr-bg);
     color: var(--text-hvr);
     border-radius: 3px;
@@ -327,12 +339,16 @@ form {
     align-content: center;
 }
 
-/*---------------------------------------- Profile Logo -------------------------------------------*/
+/*---------------------------------------- Images/Icons -------------------------------------------*/
 .user-prof {
     margin-bottom: auto;
     font-size: calc(30% + 2vw);
 }
 
+
+.logo {
+    height:60px;
+}
 
 
 

@@ -84,6 +84,3 @@ Here's how donation requests are handled in `app.py`:
 
 - Contributions are welcome! Fork the repository, create a branch, and submit a pull request.
 
-### Notes
-
-- Replace `/path/to/screenshot1.png` and `/path/to/screenshot2.png` with the actual paths to your screenshots.
